@@ -14,6 +14,9 @@
         "streambuf": "c",
         "tuple": "c",
         "type_traits": "c",
-        "*.inc": "c"
-    }
+        "*.inc": "c",
+        "stdbool.h": "c",
+        "solver.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }
