@@ -9,15 +9,6 @@
 #include "solver.h"
 
 #define ARRAY_LENGTH(array) (sizeof(array) / sizeof(array[0]))
-
-struct board {
-    size_t size;
-    uint32_t faces_in_dice;
-    size_t edgelen;
-    uint32_t edges[][2];
-};
-
-
 // void play_move(uint32_t* pos, size_t board_size);
 uint32_t roll_dice(uint32_t faces_in_dice);
 
@@ -37,52 +28,21 @@ void mean_time_empirical(const struct board *board, const size_t T)
     printf("Avg length of games: %f\n", ((float )sum / T));
 }
 
-void mean_time_theoretical(const struct board *board)
-{
-    const size_t size = board->size;
-    const size_t edgelen = board->edgelen;
-
-    float (*matrix)[size][size] = malloc(sizeof(float[size][size]));
-
-    create_matrix2(board->edgelen, board->edges, board->faces_in_dice, board->size, *matrix);
-    
-    float *y = malloc(sizeof(float) * size);
-    for (size_t i = 0; i < size - 1; ++i) y[i] = 1;
-    for (size_t i = 0; i < edgelen; ++i) y[board->edges[i][0]] = 0;
-    y[size - 1] = 0;
-    
-    float *x = malloc(sizeof(float) * size);
-
-    gaussian_elimination(size, *matrix, y, x);
-    printf("Theoretical mean length of games is: %f\n", x[0]);
-
-    free(matrix);
-    free(y);
-    free(x);
-}
-
 int main(int argc, char** argv)
 {
     srand(time(0));
     
+    const float time = 16.0;
     const size_t edgelen = 4;
-    struct board *board = malloc(sizeof(struct board) + sizeof(board->edges[0]) * edgelen);
+    const size_t boardsize = 25;
+    const uint32_t faces_in_dice = 6;
+    uint32_t (*edges)[2] = malloc(sizeof(uint32_t[2]) * edgelen);
 
-    board->edgelen = edgelen;
-    board->faces_in_dice = 3;
-    board->size = 25;
-
-    board_initialize_random(board->size, edgelen, board->edges);
-
-    for (size_t i = 0; i < edgelen; i++)
-        printf("[%d, %d]", board->edges[i][0], board->edges[i][1]);
-    puts("");
-
-    mean_time_empirical(board, 1000);
-    mean_time_theoretical(board);
+    optimize_board(boardsize, faces_in_dice, edgelen, time, edges);
     
+    const float t = mean_time_theoretical(boardsize, faces_in_dice, edgelen, edges);
+    printf("Uh.... we got %f", t);
 
-    free(board);
     return 0;
 }
 

@@ -16,7 +16,9 @@
         "type_traits": "c",
         "*.inc": "c",
         "stdbool.h": "c",
-        "solver.h": "c"
+        "solver.h": "c",
+        "boardtime.h": "c",
+        "stdlib.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
