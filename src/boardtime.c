@@ -31,26 +31,30 @@ float mean_time_theoretical(const size_t boardsize, const uint32_t faces_in_dice
 void create_matrix2(size_t edge_len, const uint32_t edges[edge_len][2],
     uint32_t faces_in_dice, size_t dim, float matrix[dim][dim])
 {
-   memset(matrix, 0, sizeof(float[dim][dim]));
+    memset(matrix, 0, sizeof(float[dim][dim]));
 
-   for (size_t i = 0; i < edge_len; ++i) {
-       matrix[edges[i][0]][edges[i][0]] = 1;
-       matrix[edges[i][0]][edges[i][1]] = -1;
-   }
+    for (size_t i = 0; i < edge_len; ++i) {
+        if (edges[i][0] == edges[i][1] 
+            || matrix[edges[i][0]][edges[i][0]] != 0) 
+            continue;
+        
+        matrix[edges[i][0]][edges[i][0]] = 1;
+        matrix[edges[i][0]][edges[i][1]] = -1;
+    }
 
-   for (size_t row = 0; row < dim - 1; ++row) {
-       if (matrix[row][row] != 0) continue;
+    for (size_t row = 0; row < dim - 1; ++row) {
+        if (matrix[row][row] != 0) continue;
 
-       if (dim - row > faces_in_dice)
-           matrix[row][row] = 1;
-       else
-           matrix[row][row] = (float)(dim - row -1) / faces_in_dice;
+        if (dim - row > faces_in_dice)
+            matrix[row][row] = 1;
+        else
+            matrix[row][row] = (float)(dim - row -1) / faces_in_dice;
 
-       for (size_t idx = 1; idx <= faces_in_dice && row + idx < dim; ++idx)
-           matrix[row][row + idx] = - 1 / (float)faces_in_dice;
-   }
+        for (size_t idx = 1; idx <= faces_in_dice && row + idx < dim; ++idx)
+            matrix[row][row + idx] = - 1 / (float)faces_in_dice;
+    }
 
-   matrix[dim - 1][dim - 1] = 1;
+    matrix[dim - 1][dim - 1] = 1;
 }
 
 // Ax = y

@@ -18,7 +18,9 @@
         "stdbool.h": "c",
         "solver.h": "c",
         "boardtime.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "cstring": "c",
+        "variant": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

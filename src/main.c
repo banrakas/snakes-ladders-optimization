@@ -32,16 +32,19 @@ int main(int argc, char** argv)
 {
     srand(time(0));
     
-    const float time = 16.0;
-    const size_t edgelen = 4;
-    const size_t boardsize = 25;
+    const float time = 65;
+    const size_t edgelen = 16;
+    const size_t boardsize = 100;
     const uint32_t faces_in_dice = 6;
     uint32_t (*edges)[2] = malloc(sizeof(uint32_t[2]) * edgelen);
 
     optimize_board(boardsize, faces_in_dice, edgelen, time, edges);
     
     const float t = mean_time_theoretical(boardsize, faces_in_dice, edgelen, edges);
-    printf("Uh.... we got %f", t);
+    printf("Uh.... we got %f\n", t);
+
+    uint32_t edges2[][2] = {{27, 4}, {34, 9}, {32, 14}, {6, 16}, {30, 17}, {25, 5}};
+    printf("%f", mean_time_theoretical(36, 6, 6, edges2));
 
     return 0;
 }
